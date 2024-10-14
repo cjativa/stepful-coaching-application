@@ -6,14 +6,9 @@ import { Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Box from "@mui/material/Box";
-import { DateField } from "@mui/x-date-pickers/DateField";
 import { TimeField } from "@mui/x-date-pickers/TimeField";
 import dayjs, { type Dayjs } from "dayjs";
-
-enum PickerSources {
-  "DatePicker" = "DatePicker",
-  "TimePicker" = "TimePicker",
-}
+import Button from "@mui/material/Button";
 
 const StyledBookingContainer = styled(Paper)(({ theme }) => ({
   minWidth: "400px",
@@ -32,7 +27,7 @@ const StyledSchedulingContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const CoachBooking = () => {
-  const [dateValue, setDateValue] = React.useState<Dayjs | null>(
+  const [startDateValue, setStartDateValue] = React.useState<Dayjs | null>(
     dayjs("2024-10-01T15:30")
   );
   const [endDateValue, setEndDateValue] = React.useState<Dayjs | null>(
@@ -54,7 +49,7 @@ export const CoachBooking = () => {
     const newEndTime = generateEndTime(newTimeValue);
 
     // Update the start time and end time to reflect the changes
-    setDateValue(newTimeValue);
+    setStartDateValue(newTimeValue);
     setEndDateValue(newEndTime);
   }
 
@@ -62,7 +57,15 @@ export const CoachBooking = () => {
    * @param newDateValue - The new date time value
    */
   function handleDateChange(newDateValue: Dayjs) {
-    setDateValue(newDateValue);
+    setStartDateValue(newDateValue);
+  }
+
+  /** Handler for when an availability slot is added */
+  function handleAddSlotClick() {
+    console.log(`
+      Slot Start: ${startDateValue?.toISOString()}
+      Slot End: ${endDateValue?.toISOString()}
+      `);
   }
 
   return (
@@ -75,20 +78,23 @@ export const CoachBooking = () => {
         <StyledSchedulingContainer>
           <DatePicker
             label="Date"
-            value={dateValue}
+            value={startDateValue}
             onChange={(value) => value && handleDateChange(value)}
           />{" "}
           <TimePicker
             label="Start Time"
-            value={dateValue}
+            value={startDateValue}
             onChange={(value) => value && handleTimeChange(value)}
           />
           <TimeField
             label="End Time"
             value={endDateValue}
-            onChange={(newValue) => setDateValue(newValue)}
+            onChange={(newValue) => setStartDateValue(newValue)}
             readOnly
           />
+          <Button variant={"contained"} onClick={handleAddSlotClick}>
+            Add Availability Slot
+          </Button>
         </StyledSchedulingContainer>
       </StyledBookingContainer>
     </Stack>
