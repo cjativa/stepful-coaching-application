@@ -7,7 +7,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { BrowserRouter } from "react-router-dom";
 
 import { LoginPage } from "./pages";
-import { CoachBooking } from "./pages/booking";
+import { CoachBooking, StudentBooking } from "./pages/booking";
 import { LocalStorageService } from "./services";
 import { AuthenticationProvider } from "./contexts";
 import { COACHES, STUDENTS } from "./constants";
@@ -46,6 +46,7 @@ export const Application = () => {
               <Route path="/" element={<LoginPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/booking/coach" element={<CoachBooking />} />
+              <Route path="/booking/student" element={<StudentBooking />} />
             </Routes>
           </StyledBackground>
         </LocalizationProvider>
