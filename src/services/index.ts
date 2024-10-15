@@ -1,6 +1,6 @@
 export {
-  CoachService,
+  ApiService,
   type BookedScheduleItem,
   type ScheduleItem,
-} from "./coachService";
+} from "./apiService";
 export { LocalStorageService } from "./localService";

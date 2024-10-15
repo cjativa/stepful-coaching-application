@@ -13,7 +13,10 @@ export type BookedScheduleItem =
        */
       bookedStudentId: string;
     }
-  | { booked: false; bookedStudentId: null };
+  | {
+      booked: false;
+      bookedStudentId: null;
+    };
 
 export type ScheduleItem = {
   /** The start time of the schedule slot */
@@ -26,7 +29,7 @@ export type ScheduleItem = {
   booked: boolean;
 };
 
-export class CoachService {
+export class ApiService {
   public static async fetchSchedule(
     coachId: string
   ): Promise<Array<BookedScheduleItem>> {

@@ -13,7 +13,7 @@ import Button from "@mui/material/Button";
 import {
   type BookedScheduleItem,
   type ScheduleItem,
-  CoachService,
+  ApiService,
 } from "../../services";
 import { useAuthentication } from "../../hooks";
 import { ScheduleList } from "./scheduleList";
@@ -36,10 +36,13 @@ const StyledSchedulingContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const CoachBooking = () => {
-  const defaultStartDate = dayjs("2024-10-01T15:30");
+  // Default start and end dates for the pickers are current time, and 2-hours from i
+  const defaultStartDate = dayjs()
+    .set("minute", 0)
+    .set("hour", dayjs().hour() + 1);
   const defaultEndDate = TimeUtilities.generateEndTime(defaultStartDate);
-  const { user } = useAuthentication();
 
+  const { user } = useAuthentication();
   const [startDateValue, setStartDateValue] = React.useState<Dayjs | null>(
     defaultStartDate
   );

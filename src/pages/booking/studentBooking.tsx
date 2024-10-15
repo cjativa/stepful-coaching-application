@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import {
   type BookedScheduleItem,
   type ScheduleItem,
-  CoachService,
+  ApiService,
 } from "../../services";
 import { useAuthentication } from "../../hooks";
 import { ScheduleList } from "./scheduleList";
