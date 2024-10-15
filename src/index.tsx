@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 
 import { Application } from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
 import { Box } from "@mui/material";
 
 const root = ReactDOM.createRoot(
@@ -12,9 +11,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Box sx={{ width: "100%", minHeight: "100vh" }}>
-      <BrowserRouter>
         <Application />
-      </BrowserRouter>
     </Box>
   </React.StrictMode>
 );
