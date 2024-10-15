@@ -63,7 +63,7 @@ export const Login = () => {
 
   const [loginName, setLoginName] = React.useState("");
   const [loginError, setLoginError] = React.useState(false);
-  const [selectedTab, setSelectedTab] = React.useState<number>(1);
+  const [selectedTab, setSelectedTab] = React.useState<number>(0);
 
   const handleTabChange = (
     event: React.SyntheticEvent,
@@ -76,7 +76,7 @@ export const Login = () => {
     setSelectedTab(newTabValue);
   };
 
-  const onLoginButtonClick = () => {
+  const onCoachLogin = () => {
     const loginIsSuccessful = login(loginName);
 
     // We'll navigate to the next step if login was successful
@@ -91,19 +91,42 @@ export const Login = () => {
     }
   };
 
+  const onStudentLogin = () => {
+    const loginIsSuccessful = login(loginName);
+
+    // We'll navigate to the next step if login was successful
+    if (loginIsSuccessful) {
+      setLoginError(false);
+      navigate("/booking/student");
+    }
+
+    // Otherwise, unsuccessful login, let's indicate a basic error
+    else {
+      setLoginError(true);
+    }
+  };
+
   const onLoginInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLoginName(event.target.value);
   };
 
   const LoginErrorMessage = () => {
     return (
-      <Typography>Could not login with the provided credential</Typography>
+      <Typography color="red">
+        Could not login with the provided credential
+      </Typography>
     );
   };
 
   return (
     <Stack>
       <StyledLoginPaper variant="outlined">
+        <img
+          style={{ marginTop: "1em" }}
+          src={"./stepful.png"}
+          alt="Stepful Logo"
+          width="200px"
+        />
         <TabPanel value={selectedTab} index={0} dir={theme.direction}>
           <StyledInputContainer>
             <p>Coach Login</p>
@@ -113,7 +136,7 @@ export const Login = () => {
               variant="filled"
               onChange={onLoginInputChange}
             />
-            <Button variant="contained" onClick={onLoginButtonClick}>
+            <Button variant="contained" onClick={onCoachLogin}>
               Login
             </Button>
             {loginError ? <LoginErrorMessage /> : null}
@@ -128,7 +151,7 @@ export const Login = () => {
               variant="filled"
               onChange={onLoginInputChange}
             />
-            <Button variant="contained" onClick={onLoginButtonClick}>
+            <Button variant="contained" onClick={onStudentLogin}>
               Login
             </Button>
             {loginError ? <LoginErrorMessage /> : null}
