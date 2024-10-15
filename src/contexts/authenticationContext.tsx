@@ -1,21 +1,25 @@
 import React, { createContext } from "react";
 
-import { STUDENTS, COACHES } from "../constants";
+import { ApiService } from "../services";
 
 type User = {
   name: string;
   id: string;
+  phoneNumber: string;
 };
 
 interface AuthenticationContextType {
   user: User | null;
-  login: (username: string) => boolean | null;
+  login: (
+    username: string,
+    type: "student" | "coach"
+  ) => Promise<boolean | null>;
   logout: () => void;
 }
 
 export const AuthenticationContext = createContext<AuthenticationContextType>({
   user: null,
-  login: () => {
+  login: async () => {
     return null;
   },
   logout: () => {},
@@ -24,20 +28,24 @@ export const AuthenticationContext = createContext<AuthenticationContextType>({
 export const AuthenticationProvider = ({ children }: { children: any }) => {
   const [user, setUser] = React.useState<User | null>(null);
 
-  const login = (tentativeUserName: string): boolean | null => {
-    const existingUser = [...STUDENTS, ...COACHES].find((userCredential) => {
-      return userCredential.name === tentativeUserName;
-    });
+  const login = async (
+    tentativeUserName: string,
+    type: "student" | "coach"
+  ): Promise<boolean> => {
+    try {
+      const foundUser = await ApiService.handleUserLogin(
+        tentativeUserName,
+        type
+      );
 
-    // Basic checking if a user exists for this tentative user
-    // If so, we'll allow sign-in
-    if (existingUser) {
-      setUser(existingUser);
+      setUser(foundUser);
       return true;
+    } catch (error) {
+      console.error(
+        `[AuthenticationProvider][login] Failed to login user with name "${tentativeUserName}"`
+      );
+      return false;
     }
-
-    // Otherwise, return false since the attempted user has no match
-    return false;
   };
 
   const logout = () => {

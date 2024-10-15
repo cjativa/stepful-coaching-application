@@ -76,8 +76,8 @@ export const Login = () => {
     setSelectedTab(newTabValue);
   };
 
-  const onCoachLogin = () => {
-    const loginIsSuccessful = login(loginName);
+  const onCoachLogin = async () => {
+    const loginIsSuccessful = await login(loginName, "coach");
 
     // We'll navigate to the next step if login was successful
     if (loginIsSuccessful) {
@@ -91,8 +91,8 @@ export const Login = () => {
     }
   };
 
-  const onStudentLogin = () => {
-    const loginIsSuccessful = login(loginName);
+  const onStudentLogin = async () => {
+    const loginIsSuccessful = await login(loginName, "student");
 
     // We'll navigate to the next step if login was successful
     if (loginIsSuccessful) {
