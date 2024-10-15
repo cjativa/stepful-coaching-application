@@ -20,12 +20,12 @@ export class ScheduleService {
 
   /** Performs retrieval of the existing schedule items for a Coach */
   public static async handleFetchForCoach(coachId: string) {
-    const scheduleItem = await prismaClient.coachSchedule.findMany({
+    const scheduleItemList = await prismaClient.coachSchedule.findMany({
       where: {
         coachId,
       },
     });
 
-    return scheduleItem;
+    return scheduleItemList;
   }
 }
