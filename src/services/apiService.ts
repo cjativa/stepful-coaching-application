@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import { LocalStorageService as Storage } from "./localService";
 
 type LocalStorageCoachSchedules = {
@@ -50,5 +52,18 @@ export class ApiService {
 
     Storage.setItem(coachKey, updatedSchedule);
     return updatedSchedule;
+  }
+
+  public static async handleUserLogin(name: string, type: "student" | "coach") {
+    const response = await axios({
+      method: "POST",
+      baseURL: "/api",
+      url: `/login/${type}`,
+      data: {
+        username: name,
+      },
+    });
+
+    return response.data;
   }
 }
