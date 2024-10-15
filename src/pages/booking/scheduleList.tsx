@@ -36,10 +36,10 @@ export const ScheduleList = (props: { scheduleList: Array<ScheduleItem> }) => {
               </TableCell>
 
               <TableCell align="right">
-                {dayjs(scheduleItem.startTime).format("h:m A")}
+                {dayjs(scheduleItem.startTime).format("h:mm A")}
               </TableCell>
               <TableCell align="right">
-                {dayjs(scheduleItem.endTime).format("h:m A")}
+                {dayjs(scheduleItem.endTime).format("h:mm A")}
               </TableCell>
               <TableCell align="right">
                 {scheduleItem.booked ? "No" : "Yes"}

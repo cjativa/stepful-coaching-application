@@ -90,13 +90,26 @@ export const CoachBooking = () => {
       return;
     }
 
-    const updatedScheduleList = scheduleList.concat([
-      {
-        startTime: startDateValue.toISOString(),
-        endTime: endDateValue.toISOString(),
-        booked: false,
-      },
-    ]);
+    const updatedScheduleList = scheduleList
+      .concat([
+        {
+          startTime: startDateValue.toISOString(),
+          endTime: endDateValue.toISOString(),
+          booked: false,
+        },
+      ])
+      .sort((itemOne, itemTwo) => {
+        const itemOneStart = dayjs(itemOne.startTime);
+        const itemTwoStart = dayjs(itemTwo.startTime);
+
+        if (itemOneStart.isBefore(itemTwoStart)) {
+          return -1;
+        }
+        if (itemOneStart.isAfter(itemTwoStart)) {
+          return 1;
+        }
+        return 0;
+      });
     setScheduleList(updatedScheduleList);
   }
 
@@ -127,8 +140,10 @@ export const CoachBooking = () => {
           <Button variant={"contained"} onClick={handleAddSlotClick}>
             Add Availability Slot
           </Button>
+
+          {/** Render the text indicating an appointment overlap error */}
           {appointmentError ? (
-            <Typography>
+            <Typography color="red">
               Could not create appointment slot for the selected time. An
               appointment slot already exists
             </Typography>
