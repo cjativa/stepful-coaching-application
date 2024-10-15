@@ -10,6 +10,13 @@ import { TimeField } from "@mui/x-date-pickers/TimeField";
 import dayjs, { type Dayjs } from "dayjs";
 import Button from "@mui/material/Button";
 
+import {
+  type BookedScheduleItem,
+  type ScheduleItem,
+  CoachService,
+} from "../../services";
+import { useAuthentication } from "../../hooks";
+
 const StyledBookingContainer = styled(Paper)(({ theme }) => ({
   minWidth: "400px",
   minHeight: "600px",
@@ -27,12 +34,17 @@ const StyledSchedulingContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const CoachBooking = () => {
+  const defaultStartDate = dayjs("2024-10-01T15:30");
+  const defaultEndDate = generateEndTime(defaultStartDate);
+
   const [startDateValue, setStartDateValue] = React.useState<Dayjs | null>(
-    dayjs("2024-10-01T15:30")
+    defaultStartDate
   );
   const [endDateValue, setEndDateValue] = React.useState<Dayjs | null>(
-    dayjs("2024-10-01T15:30")
+    defaultEndDate
   );
+  const [schedule, setSchedule] = React.useState<Array<BookedScheduleItem>>([]);
+  const { user } = useAuthentication();
 
   /** Creates a new date that is 2-hours after the provided start date
    * @param startDate - The date to be used for the 2-hour offset
@@ -61,17 +73,30 @@ export const CoachBooking = () => {
   }
 
   /** Handler for when an availability slot is added */
-  function handleAddSlotClick() {
+  async function handleAddSlotClick() {
+    if (!startDateValue || !endDateValue) {
+      return;
+    }
+
     console.log(`
       Slot Start: ${startDateValue?.toISOString()}
       Slot End: ${endDateValue?.toISOString()}
       `);
+    /*
+    const updatedSchedule = await CoachService.addScheduleSlot({
+      startTime: startDateValue.toISOString(),
+      endTime: endDateValue.toISOString(),
+      booked: false,
+    });
+    */
   }
+
+  console.log("lalala", user);
 
   return (
     <Stack>
       <StyledBookingContainer variant="outlined">
-        <Typography variant="body1">Hello Coach "INSERT_NAME_HERE"</Typography>
+        <Typography variant="body1">Hello Coach {user?.name}</Typography>
         <Typography variant="body1">
           Please add some of your availability below
         </Typography>
