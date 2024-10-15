@@ -17,6 +17,7 @@ import {
 } from "../../services";
 import { useAuthentication } from "../../hooks";
 import { ScheduleList } from "./scheduleList";
+import { TimeUtilities } from "./timeUtilities";
 
 const StyledBookingContainer = styled(Paper)(({ theme }) => ({
   minWidth: "400px",
@@ -36,7 +37,8 @@ const StyledSchedulingContainer = styled(Box)(({ theme }) => ({
 
 export const CoachBooking = () => {
   const defaultStartDate = dayjs("2024-10-01T15:30");
-  const defaultEndDate = generateEndTime(defaultStartDate);
+  const defaultEndDate = TimeUtilities.generateEndTime(defaultStartDate);
+  const { user } = useAuthentication();
 
   const [startDateValue, setStartDateValue] = React.useState<Dayjs | null>(
     defaultStartDate
@@ -47,23 +49,18 @@ export const CoachBooking = () => {
   const [scheduleList, setScheduleList] = React.useState<Array<ScheduleItem>>(
     []
   );
-  const { user } = useAuthentication();
-
-  /** Creates a new date that is 2-hours after the provided start date
-   * @param startDate - The date to be used for the 2-hour offset
-   */
-  function generateEndTime(startDate: Dayjs): Dayjs {
-    return startDate.add(2, "hours");
-  }
+  const [appointmentError, setAppointmentError] = React.useState(false);
 
   /** Handles change events for the time-picker. It will also
    * update the end time appropriately to ensure 2-hour window strictness
    * @param newTimeValue - The new date time value
    */
   function handleTimeChange(newTimeValue: Dayjs) {
-    const newEndTime = generateEndTime(newTimeValue);
+    const newEndTime = TimeUtilities.generateEndTime(newTimeValue);
 
     // Update the start time and end time to reflect the changes
+    // We'll also reset the existence of a slot error
+    setAppointmentError(false);
     setStartDateValue(newTimeValue);
     setEndDateValue(newEndTime);
   }
@@ -81,6 +78,18 @@ export const CoachBooking = () => {
       return;
     }
 
+    // We'll check if start date and end date being tentatively added
+    // would trigger an overlap with an existing schedule item.
+    // If that happens to be the case, we will indicate an error
+    const scheduleOverlapExists = TimeUtilities.determineIfScheduleOverlaps(
+      { startTime: startDateValue, endTime: endDateValue },
+      scheduleList
+    );
+    if (scheduleOverlapExists) {
+      setAppointmentError(true);
+      return;
+    }
+
     const updatedScheduleList = scheduleList.concat([
       {
         startTime: startDateValue.toISOString(),
@@ -89,13 +98,6 @@ export const CoachBooking = () => {
       },
     ]);
     setScheduleList(updatedScheduleList);
-    /*
-    const updatedSchedule = await CoachService.addScheduleSlot({
-      startTime: startDateValue.toISOString(),
-      endTime: endDateValue.toISOString(),
-      booked: false,
-    });
-    */
   }
 
   return (
@@ -110,7 +112,7 @@ export const CoachBooking = () => {
             label="Date"
             value={startDateValue}
             onChange={(value) => value && handleDateChange(value)}
-          />{" "}
+          />
           <TimePicker
             label="Start Time"
             value={startDateValue}
@@ -125,6 +127,12 @@ export const CoachBooking = () => {
           <Button variant={"contained"} onClick={handleAddSlotClick}>
             Add Availability Slot
           </Button>
+          {appointmentError ? (
+            <Typography>
+              Could not create appointment slot for the selected time. An
+              appointment slot already exists
+            </Typography>
+          ) : null}
         </StyledSchedulingContainer>
 
         <hr />
