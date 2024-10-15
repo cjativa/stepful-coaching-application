@@ -41,48 +41,7 @@ export const StudentBooking = () => {
   );
 
   /** Handler for when an availability slot is added */
-  async function handleAddSlotClick() {
-    /*
-    if (!startDateValue || !endDateValue) {
-      return;
-    }
-
-    // We'll check if start date and end date being tentatively added
-    // would trigger an overlap with an existing schedule item.
-    // If that happens to be the case, we will indicate an error
-    const scheduleOverlapExists = TimeUtilities.determineIfScheduleOverlaps(
-      { startTime: startDateValue, endTime: endDateValue },
-      scheduleList
-    );
-    if (scheduleOverlapExists) {
-      setAppointmentError(true);
-      return;
-    }
-
-    // We'll sort the list to keep the UI rendering the schedule items in order
-    const updatedScheduleList = scheduleList
-      .concat([
-        {
-          startTime: startDateValue.toISOString(),
-          endTime: endDateValue.toISOString(),
-          booked: false,
-        },
-      ])
-      .sort((itemOne, itemTwo) => {
-        const itemOneStart = dayjs(itemOne.startTime);
-        const itemTwoStart = dayjs(itemTwo.startTime);
-
-        if (itemOneStart.isBefore(itemTwoStart)) {
-          return -1;
-        }
-        if (itemOneStart.isAfter(itemTwoStart)) {
-          return 1;
-        }
-        return 0;
-      });
-    setScheduleList(updatedScheduleList);
-    */
-  }
+  async function handleAddSlotClick() {}
 
   return (
     <Stack>

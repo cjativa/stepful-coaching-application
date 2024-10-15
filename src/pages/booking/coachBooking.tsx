@@ -90,6 +90,7 @@ export const CoachBooking = () => {
       return;
     }
 
+    // We'll sort the list to keep the UI rendering the schedule items in order
     const updatedScheduleList = scheduleList
       .concat([
         {
