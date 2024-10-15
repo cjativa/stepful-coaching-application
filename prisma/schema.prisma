@@ -40,7 +40,8 @@ model CoachSchedule {
   // Could potential go into a table like `Bookings` to keep this 
   // booking related data separate from Coach schedules but for simplicity
   // and time constraints, we'll have booking information live directly in the model
-  booked          Boolean @default(false)
-  bookedStudent   Student @relation(fields: [bookedStudentId], references: [id])
-  bookedStudentId String
+  booked Boolean @default(false)
+
+  bookedStudent   Student? @relation(fields: [bookedStudentId], references: [id])
+  bookedStudentId String?
 }
