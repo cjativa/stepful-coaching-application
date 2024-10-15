@@ -16,6 +16,7 @@ import {
   CoachService,
 } from "../../services";
 import { useAuthentication } from "../../hooks";
+import { ScheduleList } from "./scheduleList";
 
 const StyledBookingContainer = styled(Paper)(({ theme }) => ({
   minWidth: "400px",
@@ -43,7 +44,9 @@ export const CoachBooking = () => {
   const [endDateValue, setEndDateValue] = React.useState<Dayjs | null>(
     defaultEndDate
   );
-  const [schedule, setSchedule] = React.useState<Array<BookedScheduleItem>>([]);
+  const [scheduleList, setScheduleList] = React.useState<Array<ScheduleItem>>(
+    []
+  );
   const { user } = useAuthentication();
 
   /** Creates a new date that is 2-hours after the provided start date
@@ -78,10 +81,14 @@ export const CoachBooking = () => {
       return;
     }
 
-    console.log(`
-      Slot Start: ${startDateValue?.toISOString()}
-      Slot End: ${endDateValue?.toISOString()}
-      `);
+    const updatedScheduleList = scheduleList.concat([
+      {
+        startTime: startDateValue.toISOString(),
+        endTime: endDateValue.toISOString(),
+        booked: false,
+      },
+    ]);
+    setScheduleList(updatedScheduleList);
     /*
     const updatedSchedule = await CoachService.addScheduleSlot({
       startTime: startDateValue.toISOString(),
@@ -90,8 +97,6 @@ export const CoachBooking = () => {
     });
     */
   }
-
-  console.log("lalala", user);
 
   return (
     <Stack>
@@ -120,6 +125,13 @@ export const CoachBooking = () => {
           <Button variant={"contained"} onClick={handleAddSlotClick}>
             Add Availability Slot
           </Button>
+        </StyledSchedulingContainer>
+
+        <hr />
+
+        <StyledSchedulingContainer>
+          <Typography variant="body1">View your Availability below</Typography>
+          <ScheduleList scheduleList={scheduleList} />
         </StyledSchedulingContainer>
       </StyledBookingContainer>
     </Stack>
