@@ -38,22 +38,6 @@ export class ApiService {
     return [];
   }
 
-  public static async addScheduleSlot(
-    coachId: string,
-    scheduleItem: ScheduleItem
-  ) {
-    // Handle where there is no schedule list for this coach yet
-    const coachKey = `coach_${coachId}`;
-    if (Storage.getItem(coachKey) === undefined) {
-      Storage.setItem(coachKey, []);
-    }
-    const schedule = Storage.getItem(coachKey) as Array<ScheduleItem>;
-    const updatedSchedule = schedule.concat([scheduleItem]);
-
-    Storage.setItem(coachKey, updatedSchedule);
-    return updatedSchedule;
-  }
-
   public static async handleUserLogin(name: string, type: "student" | "coach") {
     const response = await axios({
       method: "POST",
@@ -61,6 +45,37 @@ export class ApiService {
       url: `/login/${type}`,
       data: {
         username: name,
+      },
+    });
+
+    return response.data;
+  }
+
+  public static async fetchScheduleListForCoach(coachId: string) {
+    const response = await axios({
+      method: "POST",
+      baseURL: "/api",
+      url: `/schedule/coach`,
+      data: {
+        coachId,
+      },
+    });
+
+    return response.data;
+  }
+
+  public static async addScheduleSlot(
+    coachId: string,
+    scheduleItem: ScheduleItem
+  ) {
+    const response = await axios({
+      method: "POST",
+      baseURL: "/api",
+      url: `/schedule`,
+      data: {
+        coachId,
+        startTime: scheduleItem.startTime,
+        endTime: scheduleItem.endTime,
       },
     });
 

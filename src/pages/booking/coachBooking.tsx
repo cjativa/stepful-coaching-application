@@ -42,7 +42,7 @@ export const CoachBooking = () => {
     .set("hour", dayjs().hour() + 1);
   const defaultEndDate = TimeUtilities.generateEndTime(defaultStartDate);
 
-  const { user } = useAuthentication();
+  const user = useAuthentication().user!;
   const [startDateValue, setStartDateValue] = React.useState<Dayjs | null>(
     defaultStartDate
   );
@@ -53,6 +53,20 @@ export const CoachBooking = () => {
     []
   );
   const [appointmentError, setAppointmentError] = React.useState(false);
+
+  React.useEffect(() => {
+    if (user) {
+      const fetchScheduleList = async () => {
+        const updatedScheduleList = await ApiService.fetchScheduleListForCoach(
+          user.id
+        );
+
+        setScheduleList(updatedScheduleList);
+      };
+
+      fetchScheduleList();
+    }
+  }, [user]);
 
   /** Handles change events for the time-picker. It will also
    * update the end time appropriately to ensure 2-hour window strictness
@@ -92,29 +106,22 @@ export const CoachBooking = () => {
       setAppointmentError(true);
       return;
     }
-
-    // We'll sort the list to keep the UI rendering the schedule items in order
-    const updatedScheduleList = scheduleList
-      .concat([
-        {
-          startTime: startDateValue.toISOString(),
-          endTime: endDateValue.toISOString(),
-          booked: false,
-        },
-      ])
-      .sort((itemOne, itemTwo) => {
-        const itemOneStart = dayjs(itemOne.startTime);
-        const itemTwoStart = dayjs(itemTwo.startTime);
-
-        if (itemOneStart.isBefore(itemTwoStart)) {
-          return -1;
-        }
-        if (itemOneStart.isAfter(itemTwoStart)) {
-          return 1;
-        }
-        return 0;
+    try {
+      // We'll perform our API request to add this schedule item
+      await ApiService.addScheduleSlot(user.id, {
+        startTime: startDateValue.toISOString(),
+        endTime: endDateValue.toISOString(),
+        booked: false,
       });
-    setScheduleList(updatedScheduleList);
+
+      // Following success of it, we'll retrieve the latest schedule list
+      const updatedScheduleList = await ApiService.fetchScheduleListForCoach(
+        user.id
+      );
+      setScheduleList(updatedScheduleList);
+    } catch (error) {
+      setAppointmentError(true);
+    }
   }
 
   return (
