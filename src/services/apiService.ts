@@ -49,6 +49,12 @@ export type ScheduleItemWithAdditionalInformation = ScheduleItem & {
   student: Student;
 };
 
+export type ScheduleItemForCoach = ScheduleItem & {
+  id: number;
+  bookedStudentId: string;
+  bookedStudent: Student;
+};
+
 export class ApiService {
   public static async fetchSchedule(
     coachId: string
