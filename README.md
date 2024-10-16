@@ -19,6 +19,7 @@ Some caveats not addressed due to the ~3-hour time constraint of the project
 - Authentication is mainly client-side oriented and end-users sign into with a "name" instead of a username/password
 - Have not implemented ability for a coach to mark a call as complete to enable them to record a student's satisfaction and take free-form notes
 - Have not implemented abiility for coaches to review their past scores and notes for the appointments
+- Available appointment slots in the past can be created by coaches and can be booked by students
 
 ### Technology Stack
 - Node.js 18/Express for the backend server functionality
