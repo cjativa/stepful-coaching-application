@@ -8,12 +8,14 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import {
-  ScheduleItem,
-  ScheduleItemWithAdditionalInformation,
+  type ScheduleItemForCoach,
+  type ScheduleItemWithAdditionalInformation,
 } from "../../services";
 import dayjs from "dayjs";
 
-export const ScheduleList = (props: { scheduleList: Array<ScheduleItem> }) => {
+export const ScheduleList = (props: {
+  scheduleList: Array<ScheduleItemForCoach>;
+}) => {
   const { scheduleList } = props;
 
   return (
@@ -25,6 +27,8 @@ export const ScheduleList = (props: { scheduleList: Array<ScheduleItem> }) => {
             <TableCell align="right">Start Time</TableCell>
             <TableCell align="right">End Time</TableCell>
             <TableCell align="right">Available</TableCell>
+            <TableCell align="right">Booked Student Name</TableCell>
+            <TableCell align="right">Booked Student Phone #</TableCell>
           </TableRow>
         </TableHead>
 
@@ -47,6 +51,12 @@ export const ScheduleList = (props: { scheduleList: Array<ScheduleItem> }) => {
               </TableCell>
               <TableCell align="right">
                 {scheduleItem.booked ? "No" : "Yes"}
+              </TableCell>
+              <TableCell align="right">
+                {scheduleItem.bookedStudent?.name}
+              </TableCell>
+              <TableCell align="right">
+                {scheduleItem.bookedStudent?.phoneNumber}
               </TableCell>
             </TableRow>
           ))}

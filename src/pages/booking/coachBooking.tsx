@@ -10,7 +10,7 @@ import { TimeField } from "@mui/x-date-pickers/TimeField";
 import dayjs, { type Dayjs } from "dayjs";
 import Button from "@mui/material/Button";
 
-import { type ScheduleItem, ApiService } from "../../services";
+import { ApiService, type ScheduleItemForCoach } from "../../services";
 import { useAuthentication } from "../../hooks";
 import { ScheduleList } from "./scheduleList";
 import { TimeUtilities } from "./timeUtilities";
@@ -45,9 +45,9 @@ export const CoachBooking = () => {
   const [endDateValue, setEndDateValue] = React.useState<Dayjs | null>(
     defaultEndDate
   );
-  const [scheduleList, setScheduleList] = React.useState<Array<ScheduleItem>>(
-    []
-  );
+  const [scheduleList, setScheduleList] = React.useState<
+    Array<ScheduleItemForCoach>
+  >([]);
   const [appointmentError, setAppointmentError] = React.useState(false);
 
   React.useEffect(() => {
