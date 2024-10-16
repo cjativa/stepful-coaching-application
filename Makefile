@@ -4,6 +4,7 @@ build-application:
 	npm run build:server
 	npm run build:client
 	npm run postbuild:client
+	npx prisma generate
 
 # Command that populates the empty database with the right table and column structures	
 push:
