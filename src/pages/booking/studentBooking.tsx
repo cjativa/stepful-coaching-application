@@ -11,7 +11,10 @@ import {
   ScheduleItemWithAdditionalInformation,
 } from "../../services";
 import { useAuthentication } from "../../hooks";
-import { ScheduleListForStudent } from "./scheduleList";
+import {
+  AvailableScheduleItemList,
+  StudentScheduleItemList,
+} from "./scheduleList";
 
 const StyledBookingContainer = styled(Paper)(({ theme }) => ({
   minWidth: "400px",
@@ -35,17 +38,21 @@ export const StudentBooking = () => {
   const [scheduleList, setScheduleList] = React.useState<
     Array<ScheduleItemWithAdditionalInformation>
   >([]);
+  const [studentScheduleList, setStudentScheduleList] = React.useState<
+    Array<ScheduleItemWithAdditionalInformation>
+  >([]);
+
   const [selectedSchedule, setSelectedSchedule] =
     React.useState<ScheduleItemWithAdditionalInformation | null>(null);
 
   React.useEffect(() => {
     if (user) {
       const fetchScheduleList = async () => {
-        const scheduleList = await ApiService.fetchScheduleListForStudent(
-          user.id
-        );
+        const { currentAvailableScheduleList, studentBookedScheduleList } =
+          await ApiService.fetchScheduleListForStudent(user.id);
 
-        setScheduleList(scheduleList);
+        setScheduleList(currentAvailableScheduleList);
+        setStudentScheduleList(studentBookedScheduleList);
       };
       fetchScheduleList();
     }
@@ -57,11 +64,12 @@ export const StudentBooking = () => {
       try {
         await ApiService.handleBookingForStudent(user.id, selectedSchedule.id);
         // Following success of it, we'll retrieve the latest schedule list
-        const updatedScheduleList =
+        const { studentBookedScheduleList, currentAvailableScheduleList } =
           await ApiService.fetchScheduleListForStudent(user.id);
 
         setSelectedSchedule(null);
-        setScheduleList(updatedScheduleList);
+        setScheduleList(currentAvailableScheduleList);
+        setStudentScheduleList(studentBookedScheduleList);
       } catch (error) {
         console.error(
           `[StudentBooking] An error occurred retrieving updated schedule list`
@@ -76,22 +84,25 @@ export const StudentBooking = () => {
         <StyledSchedulingContainer>
           <Typography variant="body1">Hello Student {user?.name}</Typography>
           <Typography variant="body1">
-            Book an appointment with a coach below
+            Book an appointment with a coach from the availability list below
           </Typography>
-          <ScheduleListForStudent
+          <AvailableScheduleItemList
             scheduleList={scheduleList}
             selectedSchedule={selectedSchedule}
             onSelectedSchedule={(schedule) => setSelectedSchedule(schedule)}
           />
-        </StyledSchedulingContainer>
+          <Button
+            variant={"contained"}
+            onClick={handleBookSlotClick}
+            disabled={selectedSchedule === null}
+          >
+            Book Selected Appointment
+          </Button>
 
-        <Button
-          variant={"contained"}
-          onClick={handleBookSlotClick}
-          disabled={selectedSchedule === null}
-        >
-          Book Selected Appointment
-        </Button>
+          <hr />
+          <Typography variant="body1">Your booked appointments</Typography>
+          <StudentScheduleItemList scheduleList={studentScheduleList} />
+        </StyledSchedulingContainer>
       </StyledBookingContainer>
     </Stack>
   );
