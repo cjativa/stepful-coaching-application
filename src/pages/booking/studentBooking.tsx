@@ -51,10 +51,22 @@ export const StudentBooking = () => {
     }
   }, [user]);
 
-  /** Handler for when an availability slot is added */
+  /** Handler for when an availability slot is booked by the student */
   async function handleBookSlotClick() {
     if (selectedSchedule) {
-      await ApiService.handleBookingForStudent(user.id, selectedSchedule.id);
+      try {
+        await ApiService.handleBookingForStudent(user.id, selectedSchedule.id);
+        // Following success of it, we'll retrieve the latest schedule list
+        const updatedScheduleList =
+          await ApiService.fetchScheduleListForStudent(user.id);
+
+        setSelectedSchedule(null);
+        setScheduleList(updatedScheduleList);
+      } catch (error) {
+        console.error(
+          `[StudentBooking] An error occurred retrieving updated schedule list`
+        );
+      }
     }
   }
 
@@ -68,9 +80,8 @@ export const StudentBooking = () => {
           </Typography>
           <ScheduleListForStudent
             scheduleList={scheduleList}
-            onSelectedSchedule={(scheduleItem) =>
-              setSelectedSchedule(scheduleItem)
-            }
+            selectedSchedule={selectedSchedule}
+            onSelectedSchedule={(schedule) => setSelectedSchedule(schedule)}
           />
         </StyledSchedulingContainer>
 

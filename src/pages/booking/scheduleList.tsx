@@ -61,23 +61,19 @@ export const ScheduleListForStudent = (props: {
   onSelectedSchedule: (
     scheduleItem: ScheduleItemWithAdditionalInformation | null
   ) => void;
+  selectedSchedule: ScheduleItemWithAdditionalInformation | null;
 }) => {
-  const { scheduleList, onSelectedSchedule } = props;
-  const [selectedScheduleId, setSelectedScheduleId] = React.useState<
-    number | null
-  >(null);
+  const { scheduleList, onSelectedSchedule, selectedSchedule } = props;
 
   const handleSelectClick = (
-    selectedSchedule: ScheduleItemWithAdditionalInformation
+    schedule: ScheduleItemWithAdditionalInformation
   ) => {
     // If the schedule being selected is the same as the current
     // selected schedule id, then end-user probably wants to deselect
-    if (selectedScheduleId === selectedSchedule.id) {
-      setSelectedScheduleId(null);
+    if (selectedSchedule?.id === schedule.id) {
       onSelectedSchedule(null);
     } else {
-      setSelectedScheduleId(selectedSchedule.id);
-      onSelectedSchedule(selectedSchedule);
+      onSelectedSchedule(schedule);
     }
   };
 
@@ -121,7 +117,7 @@ export const ScheduleListForStudent = (props: {
               <TableCell align="right">
                 <Checkbox
                   color="primary"
-                  checked={scheduleItem.id === selectedScheduleId}
+                  checked={scheduleItem.id === selectedSchedule?.id}
                   disabled={scheduleItem.booked}
                   onChange={() => handleSelectClick(scheduleItem)}
                 />
