@@ -82,9 +82,10 @@ export class ApiService {
     return response.data;
   }
 
-  public static async fetchScheduleListForStudent(
-    studentId: string
-  ): Promise<Array<ScheduleItemWithAdditionalInformation>> {
+  public static async fetchScheduleListForStudent(studentId: string): Promise<{
+    studentBookedScheduleList: Array<ScheduleItemWithAdditionalInformation>;
+    currentAvailableScheduleList: Array<ScheduleItemWithAdditionalInformation>;
+  }> {
     const response = await axios({
       method: "POST",
       baseURL: "/api",
@@ -94,7 +95,10 @@ export class ApiService {
       },
     });
 
-    return response.data;
+    const { studentBookedScheduleList, currentAvailableScheduleList } =
+      response.data;
+
+    return { studentBookedScheduleList, currentAvailableScheduleList };
   }
 
   public static async addScheduleSlot(
