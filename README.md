@@ -53,3 +53,7 @@ You can test the application by signing in using the following student profiles
 1. Jeremy J
 2. Dylan A
 3. Camila P
+
+**Loom Video of running through these steps**
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/8596b37c9b3749828fa965682a83ac76?sid=05036de7-bd2e-47f3-94f3-a6eb8abd67c4" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
