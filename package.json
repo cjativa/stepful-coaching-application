@@ -25,10 +25,12 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "PORT=3006 react-scripts start",
-    "build": "react-scripts build",
+    "start:client": "PORT=3006 react-scripts start",
+    "build:client": "react-scripts build",
     "build:server": "tsc -p server",
     "watch:server": "tsc -w -p server",
+    "start:server": "node dist/server/app.js",
+    "postbuild:client": "cp -r build dist",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "clean": "rm -rf output build"
