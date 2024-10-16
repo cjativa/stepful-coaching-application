@@ -6,6 +6,7 @@ type User = {
   name: string;
   id: string;
   phoneNumber: string;
+  type: "student" | "coach";
 };
 
 interface AuthenticationContextType {
@@ -42,9 +43,9 @@ export const AuthenticationProvider = ({ children }: { children: any }) => {
         tentativeUserName,
         type
       );
-
-      LocalStorageService.setItem(USER_KEY, foundUser);
-      setUser(foundUser);
+      const updatedUser = { ...foundUser, type };
+      LocalStorageService.setItem(USER_KEY, updatedUser);
+      setUser(updatedUser);
       return true;
     } catch (error) {
       console.error(

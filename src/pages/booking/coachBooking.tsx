@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 import { TimeField } from "@mui/x-date-pickers/TimeField";
 import dayjs, { type Dayjs } from "dayjs";
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import { ApiService, type ScheduleItemForCoach } from "../../services";
 import { useAuthentication } from "../../hooks";
@@ -135,6 +135,12 @@ export const CoachBooking = () => {
   function handleLogoutClick() {
     logout();
     navigate("/login");
+  }
+
+  // Only allow coach end-users access here
+  // TODO - move into protected route logic at some point
+  if (user && user.type !== "coach") {
+    return <Navigate to="/" />;
   }
 
   return (

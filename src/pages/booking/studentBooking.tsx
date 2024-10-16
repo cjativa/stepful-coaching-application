@@ -5,7 +5,7 @@ import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import {
   ApiService,
@@ -87,6 +87,12 @@ export const StudentBooking = () => {
   function handleLogoutClick() {
     logout();
     navigate("/login");
+  }
+
+  // Only allow student end-users access here
+  // TODO - move into protected route logic at some point
+  if (user && user.type !== "student") {
+    return <Navigate to="/" />;
   }
 
   return (
