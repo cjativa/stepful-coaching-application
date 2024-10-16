@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import { TimeField } from "@mui/x-date-pickers/TimeField";
 import dayjs, { type Dayjs } from "dayjs";
 import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 
 import { ApiService, type ScheduleItemForCoach } from "../../services";
 import { useAuthentication } from "../../hooks";
@@ -38,7 +39,11 @@ export const CoachBooking = () => {
     .set("hour", dayjs().hour() + 1);
   const defaultEndDate = TimeUtilities.generateEndTime(defaultStartDate);
 
-  const user = useAuthentication().user!;
+  const navigate = useNavigate();
+  const authentication = useAuthentication();
+  const user = authentication.user!;
+  const logout = authentication.logout;
+
   const [startDateValue, setStartDateValue] = React.useState<Dayjs | null>(
     defaultStartDate
   );
@@ -125,6 +130,13 @@ export const CoachBooking = () => {
     }
   }
 
+  /** Handles logging out the signed-in coach user and returning to sign-in
+   */
+  function handleLogoutClick() {
+    logout();
+    navigate("/login");
+  }
+
   return (
     <Stack>
       <StyledBookingContainer variant="outlined">
@@ -168,6 +180,10 @@ export const CoachBooking = () => {
           <Typography variant="body1">View your Availability below</Typography>
           <ScheduleList scheduleList={scheduleList} />
         </StyledSchedulingContainer>
+
+        <Button variant={"contained"} onClick={handleLogoutClick}>
+          Sign out
+        </Button>
       </StyledBookingContainer>
     </Stack>
   );

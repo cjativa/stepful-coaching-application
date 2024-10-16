@@ -5,6 +5,7 @@ import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 
 import {
   ApiService,
@@ -33,7 +34,10 @@ const StyledSchedulingContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const StudentBooking = () => {
-  const user = useAuthentication().user!;
+  const navigate = useNavigate();
+  const authentication = useAuthentication();
+  const logout = authentication.logout;
+  const user = authentication.user!;
 
   const [scheduleList, setScheduleList] = React.useState<
     Array<ScheduleItemWithAdditionalInformation>
@@ -78,6 +82,13 @@ export const StudentBooking = () => {
     }
   }
 
+  /** Handles logging out the signed-in coach user and returning to sign-in
+   */
+  function handleLogoutClick() {
+    logout();
+    navigate("/login");
+  }
+
   return (
     <Stack>
       <StyledBookingContainer variant="outlined">
@@ -98,11 +109,18 @@ export const StudentBooking = () => {
           >
             Book Selected Appointment
           </Button>
+        </StyledSchedulingContainer>
 
-          <hr />
+        <hr />
+
+        <StyledSchedulingContainer>
           <Typography variant="body1">Your booked appointments</Typography>
           <StudentScheduleItemList scheduleList={studentScheduleList} />
         </StyledSchedulingContainer>
+
+        <Button variant={"contained"} onClick={handleLogoutClick}>
+          Sign out
+        </Button>
       </StyledBookingContainer>
     </Stack>
   );
