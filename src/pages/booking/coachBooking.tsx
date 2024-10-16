@@ -86,7 +86,11 @@ export const CoachBooking = () => {
    * @param newDateValue - The new date time value
    */
   function handleDateChange(newDateValue: Dayjs) {
+    const newEndTime = TimeUtilities.generateEndTime(newDateValue);
+
+    setAppointmentError(false);
     setStartDateValue(newDateValue);
+    setEndDateValue(newEndTime);
   }
 
   /** Handler for when an availability slot is added */
