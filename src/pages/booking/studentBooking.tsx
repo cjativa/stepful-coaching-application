@@ -4,8 +4,6 @@ import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
-
-import dayjs, { type Dayjs } from "dayjs";
 import Button from "@mui/material/Button";
 
 import {
@@ -36,6 +34,9 @@ export const StudentBooking = () => {
   const [scheduleList, setScheduleList] = React.useState<
     Array<ScheduleItemWithAdditionalInformation>
   >([]);
+  const [selectedSchedule, setSelectedSchedule] =
+    React.useState<ScheduleItemWithAdditionalInformation | null>(null);
+
   React.useEffect(() => {
     if (user) {
       const fetchScheduleList = async () => {
@@ -56,14 +57,24 @@ export const StudentBooking = () => {
     <Stack>
       <StyledBookingContainer variant="outlined">
         <StyledSchedulingContainer>
+          <Typography variant="body1">Hello Student {user?.name}</Typography>
           <Typography variant="body1">
             Book an appointment with a coach below
           </Typography>
-          <ScheduleListForStudent scheduleList={scheduleList} />
+          <ScheduleListForStudent
+            scheduleList={scheduleList}
+            onSelectedSchedule={(scheduleItem) =>
+              setSelectedSchedule(scheduleItem)
+            }
+          />
         </StyledSchedulingContainer>
 
-        <Button variant={"contained"} onClick={handleAddSlotClick}>
-          Book Appointment
+        <Button
+          variant={"contained"}
+          onClick={handleAddSlotClick}
+          disabled={selectedSchedule === null}
+        >
+          Book Selected Appointment
         </Button>
       </StyledBookingContainer>
     </Stack>

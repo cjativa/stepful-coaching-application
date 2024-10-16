@@ -6,8 +6,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Checkbox from "@mui/material/Checkbox";
 import {
-  BookedScheduleItem,
   ScheduleItem,
   ScheduleItemWithAdditionalInformation,
 } from "../../services";
@@ -58,8 +58,28 @@ export const ScheduleList = (props: { scheduleList: Array<ScheduleItem> }) => {
 
 export const ScheduleListForStudent = (props: {
   scheduleList: Array<ScheduleItemWithAdditionalInformation>;
+  onSelectedSchedule: (
+    scheduleItem: ScheduleItemWithAdditionalInformation | null
+  ) => void;
 }) => {
-  const { scheduleList } = props;
+  const { scheduleList, onSelectedSchedule } = props;
+  const [selectedScheduleId, setSelectedScheduleId] = React.useState<
+    number | null
+  >(null);
+
+  const handleSelectClick = (
+    selectedSchedule: ScheduleItemWithAdditionalInformation
+  ) => {
+    // If the schedule being selected is the same as the current
+    // selected schedule id, then end-user probably wants to deselect
+    if (selectedScheduleId === selectedSchedule.id) {
+      setSelectedScheduleId(null);
+      onSelectedSchedule(null);
+    } else {
+      setSelectedScheduleId(selectedSchedule.id);
+      onSelectedSchedule(selectedSchedule);
+    }
+  };
 
   return (
     <TableContainer component={Paper}>
@@ -71,6 +91,7 @@ export const ScheduleListForStudent = (props: {
             <TableCell align="right">Start Time</TableCell>
             <TableCell align="right">End Time</TableCell>
             <TableCell align="right">Available</TableCell>
+            <TableCell align="right">Selected</TableCell>
           </TableRow>
         </TableHead>
 
@@ -96,6 +117,14 @@ export const ScheduleListForStudent = (props: {
               </TableCell>
               <TableCell align="right">
                 {scheduleItem.booked ? "No" : "Yes"}
+              </TableCell>
+              <TableCell align="right">
+                <Checkbox
+                  color="primary"
+                  checked={scheduleItem.id === selectedScheduleId}
+                  disabled={scheduleItem.booked}
+                  onChange={() => handleSelectClick(scheduleItem)}
+                />
               </TableCell>
             </TableRow>
           ))}
