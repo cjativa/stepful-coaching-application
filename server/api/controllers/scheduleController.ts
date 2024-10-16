@@ -76,7 +76,20 @@ export class ScheduleController {
     request: express.Request,
     response: express.Response
   ) {
-    return response.status(200).json({});
+    try {
+      const studentId = request.body.studentId as string;
+      const scheduleItemId = request.body.scheduleItemId as number;
+      const updatedScheduleItem = await ScheduleService.handleBookingForStudent(
+        studentId,
+        scheduleItemId
+      );
+
+      return response.status(200).json(updatedScheduleItem);
+    } catch (error) {
+      return response
+        .status(400)
+        .json("Could not perform booking of appointment for student");
+    }
   }
 
   public static async handleCompletion(

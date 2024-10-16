@@ -40,4 +40,22 @@ export class ScheduleService {
     });
     return scheduleItemList;
   }
+
+  /** Performs booking of a Coach's appointment slot for a Student */
+  public static async handleBookingForStudent(
+    studentId: string,
+    scheduleItemId: number
+  ) {
+    // We want to include the coach and booked student
+    const updatedScheduleItem = await prismaClient.coachSchedule.update({
+      where: {
+        id: scheduleItemId,
+      },
+      data: {
+        booked: true,
+        bookedStudentId: studentId,
+      },
+    });
+    return updatedScheduleItem;
+  }
 }
