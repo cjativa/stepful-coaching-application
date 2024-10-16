@@ -113,4 +113,21 @@ export class ApiService {
 
     return response.data;
   }
+
+  public static async handleBookingForStudent(
+    studentId: string,
+    scheduleItemId: number
+  ): Promise<ScheduleItemWithAdditionalInformation> {
+    const response = await axios({
+      method: "POST",
+      baseURL: "/api",
+      url: `/schedule/book`,
+      data: {
+        studentId,
+        scheduleItemId,
+      },
+    });
+
+    return response.data;
+  }
 }
