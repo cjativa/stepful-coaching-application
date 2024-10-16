@@ -60,11 +60,13 @@ export class ScheduleController {
   ) {
     try {
       const studentId = request.body.studentId;
-      const scheduleItemList = await ScheduleService.handleFetchForStudent(
-        studentId
-      );
+      const { studentBookedScheduleList, currentAvailableScheduleList } =
+        await ScheduleService.handleFetchForStudent(studentId);
 
-      return response.status(200).json(scheduleItemList);
+      return response.status(200).json({
+        studentBookedScheduleList,
+        currentAvailableScheduleList,
+      });
     } catch (error) {
       return response
         .status(400)
