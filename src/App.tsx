@@ -6,11 +6,13 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { BrowserRouter } from "react-router-dom";
 
-import { LoginPage } from "./pages";
-import { CoachBooking, StudentBooking } from "./pages/booking";
-import { LocalStorageService } from "./services";
+import {
+  LoginPage,
+  CoachBookingPage,
+  StudentBookingPage,
+  ProtectedRoute,
+} from "./pages";
 import { AuthenticationProvider } from "./contexts";
-import { COACHES, STUDENTS } from "./constants";
 
 const StyledBackground = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -32,8 +34,13 @@ export const Application = () => {
             <Routes>
               <Route path="/" element={<LoginPage />} />
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/booking/coach" element={<CoachBooking />} />
-              <Route path="/booking/student" element={<StudentBooking />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/booking/coach" element={<CoachBookingPage />} />
+                <Route
+                  path="/booking/student"
+                  element={<StudentBookingPage />}
+                />
+              </Route>
             </Routes>
           </StyledBackground>
         </LocalizationProvider>
