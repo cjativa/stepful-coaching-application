@@ -10,11 +10,7 @@ import { TimeField } from "@mui/x-date-pickers/TimeField";
 import dayjs, { type Dayjs } from "dayjs";
 import Button from "@mui/material/Button";
 
-import {
-  type BookedScheduleItem,
-  type ScheduleItem,
-  ApiService,
-} from "../../services";
+import { type ScheduleItem, ApiService } from "../../services";
 import { useAuthentication } from "../../hooks";
 import { ScheduleList } from "./scheduleList";
 import { TimeUtilities } from "./timeUtilities";
@@ -101,11 +97,12 @@ export const CoachBooking = () => {
 
     // We'll check if start date and end date being tentatively added
     // would trigger an overlap with an existing schedule item.
-    // If that happens to be the case, we will indicate an error
     const scheduleOverlapExists = TimeUtilities.determineIfScheduleOverlaps(
       { startTime: startDateValue, endTime: endDateValue },
       scheduleList
     );
+
+    // If that happens to be the case, we will indicate an error
     if (scheduleOverlapExists) {
       setAppointmentError(true);
       return;
