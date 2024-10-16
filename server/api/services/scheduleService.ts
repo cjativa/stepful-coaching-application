@@ -28,4 +28,16 @@ export class ScheduleService {
 
     return scheduleItemList;
   }
+
+  /** Performs retrieval of the existing schedule items for a Student */
+  public static async handleFetchForStudent(studentId: string) {
+    // We want to include the coach and booked student
+    const scheduleItemList = await prismaClient.coachSchedule.findMany({
+      include: {
+        coach: true,
+        bookedStudent: true,
+      },
+    });
+    return scheduleItemList;
+  }
 }

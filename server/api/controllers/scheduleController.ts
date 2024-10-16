@@ -58,7 +58,18 @@ export class ScheduleController {
     request: express.Request,
     response: express.Response
   ) {
-    return response.status(200).json({});
+    try {
+      const studentId = request.body.studentId;
+      const scheduleItemList = await ScheduleService.handleFetchForStudent(
+        studentId
+      );
+
+      return response.status(200).json(scheduleItemList);
+    } catch (error) {
+      return response
+        .status(400)
+        .json("Could not retrieve schedule list for student");
+    }
   }
 
   public static async handleBook(
