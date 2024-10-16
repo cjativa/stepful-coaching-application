@@ -24,19 +24,6 @@ const StyledBackground = styled(Box)(({ theme }) => ({
 }));
 
 export const Application = () => {
-  React.useEffect(() => {
-    // Only seed the database if it isn't already seeded
-    const applicationKey = `app`;
-    const coachesKey = `coaches`;
-    const studentsKey = `students`;
-
-    if (localStorage.getItem(applicationKey) === null) {
-      console.log(`Initializing local storage`);
-      LocalStorageService.setItem(coachesKey, COACHES);
-      LocalStorageService.setItem(studentsKey, STUDENTS);
-    }
-  }, []);
-
   return (
     <AuthenticationProvider>
       <BrowserRouter>

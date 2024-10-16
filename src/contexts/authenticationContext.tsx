@@ -1,6 +1,6 @@
 import React, { createContext } from "react";
 
-import { ApiService } from "../services";
+import { ApiService, LocalStorageService } from "../services";
 
 type User = {
   name: string;
@@ -17,6 +17,8 @@ interface AuthenticationContextType {
   logout: () => void;
 }
 
+const USER_KEY = "user";
+
 export const AuthenticationContext = createContext<AuthenticationContextType>({
   user: null,
   login: async () => {
@@ -26,7 +28,10 @@ export const AuthenticationContext = createContext<AuthenticationContextType>({
 });
 
 export const AuthenticationProvider = ({ children }: { children: any }) => {
-  const [user, setUser] = React.useState<User | null>(null);
+  // Fetch persisted user from Local Storage. Quick but dirty solution
+  // for better user experience following page refreshes
+  const localPersistedUser = LocalStorageService.getItem(USER_KEY) || null;
+  const [user, setUser] = React.useState<User | null>(localPersistedUser);
 
   const login = async (
     tentativeUserName: string,
@@ -38,6 +43,7 @@ export const AuthenticationProvider = ({ children }: { children: any }) => {
         type
       );
 
+      LocalStorageService.setItem(USER_KEY, foundUser);
       setUser(foundUser);
       return true;
     } catch (error) {
@@ -50,6 +56,7 @@ export const AuthenticationProvider = ({ children }: { children: any }) => {
 
   const logout = () => {
     setUser(null);
+    LocalStorageService.removeItem(USER_KEY);
   };
 
   return (
