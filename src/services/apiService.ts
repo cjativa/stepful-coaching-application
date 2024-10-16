@@ -6,6 +6,18 @@ type LocalStorageCoachSchedules = {
   [coachId: string]: Array<ScheduleItem>;
 };
 
+type Coach = {
+  id: string;
+  name: string;
+  phoneNumber: string;
+};
+
+type Student = {
+  id: string;
+  name: string;
+  phoneNumber: string;
+};
+
 export type BookedScheduleItem =
   | {
       booked: true;
@@ -29,6 +41,11 @@ export type ScheduleItem = {
 
   /** Whether or not this particular schedule slot has been booked yet */
   booked: boolean;
+};
+
+export type ScheduleItemWithAdditionalInformation = ScheduleItem & {
+  coach: Coach;
+  student: Student;
 };
 
 export class ApiService {
@@ -58,6 +75,21 @@ export class ApiService {
       url: `/schedule/coach`,
       data: {
         coachId,
+      },
+    });
+
+    return response.data;
+  }
+
+  public static async fetchScheduleListForStudent(
+    studentId: string
+  ): Promise<Array<ScheduleItemWithAdditionalInformation>> {
+    const response = await axios({
+      method: "POST",
+      baseURL: "/api",
+      url: `/schedule/student`,
+      data: {
+        studentId,
       },
     });
 
