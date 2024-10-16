@@ -24,6 +24,9 @@ export class ScheduleService {
       where: {
         coachId,
       },
+      include: {
+        bookedStudent: true,
+      },
     });
 
     return scheduleItemList;
