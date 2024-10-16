@@ -65,15 +65,13 @@ export const Login = () => {
   const [loginError, setLoginError] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState<number>(0);
 
-  const handleTabChange = (
-    event: React.SyntheticEvent,
-    newTabValue: number
-  ) => {
+  const handleTabChange = (_: React.SyntheticEvent, newTabValue: number) => {
     // Handle changing of the tab selection
     // We'll also clear out the entered login name when
-    // the end-user switches between login tabs
+    // the end-user switches between login tabs and reset an error state
     setLoginName("");
     setSelectedTab(newTabValue);
+    setLoginError(false);
   };
 
   const onCoachLogin = async () => {
