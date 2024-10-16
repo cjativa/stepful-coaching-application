@@ -44,6 +44,7 @@ export type ScheduleItem = {
 };
 
 export type ScheduleItemWithAdditionalInformation = ScheduleItem & {
+  id: number;
   coach: Coach;
   student: Student;
 };

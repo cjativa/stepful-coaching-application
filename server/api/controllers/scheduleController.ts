@@ -79,6 +79,7 @@ export class ScheduleController {
     try {
       const studentId = request.body.studentId as string;
       const scheduleItemId = request.body.scheduleItemId as number;
+
       const updatedScheduleItem = await ScheduleService.handleBookingForStudent(
         studentId,
         scheduleItemId

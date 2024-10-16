@@ -30,7 +30,8 @@ const StyledSchedulingContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const StudentBooking = () => {
-  const { user } = useAuthentication();
+  const user = useAuthentication().user!;
+
   const [scheduleList, setScheduleList] = React.useState<
     Array<ScheduleItemWithAdditionalInformation>
   >([]);
@@ -51,7 +52,11 @@ export const StudentBooking = () => {
   }, [user]);
 
   /** Handler for when an availability slot is added */
-  async function handleAddSlotClick() {}
+  async function handleBookSlotClick() {
+    if (selectedSchedule) {
+      await ApiService.handleBookingForStudent(user.id, selectedSchedule.id);
+    }
+  }
 
   return (
     <Stack>
@@ -71,7 +76,7 @@ export const StudentBooking = () => {
 
         <Button
           variant={"contained"}
-          onClick={handleAddSlotClick}
+          onClick={handleBookSlotClick}
           disabled={selectedSchedule === null}
         >
           Book Selected Appointment
