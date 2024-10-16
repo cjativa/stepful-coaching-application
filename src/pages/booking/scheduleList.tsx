@@ -6,7 +6,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { BookedScheduleItem, ScheduleItem } from "../../services";
+import {
+  BookedScheduleItem,
+  ScheduleItem,
+  ScheduleItemWithAdditionalInformation,
+} from "../../services";
 import dayjs from "dayjs";
 
 export const ScheduleList = (props: { scheduleList: Array<ScheduleItem> }) => {
@@ -32,6 +36,55 @@ export const ScheduleList = (props: { scheduleList: Array<ScheduleItem> }) => {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
+                {dayjs(scheduleItem.startTime).format("dddd, MMMM D YYYY")}
+              </TableCell>
+
+              <TableCell align="right">
+                {dayjs(scheduleItem.startTime).format("h:mm A")}
+              </TableCell>
+              <TableCell align="right">
+                {dayjs(scheduleItem.endTime).format("h:mm A")}
+              </TableCell>
+              <TableCell align="right">
+                {scheduleItem.booked ? "No" : "Yes"}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
+
+export const ScheduleListForStudent = (props: {
+  scheduleList: Array<ScheduleItemWithAdditionalInformation>;
+}) => {
+  const { scheduleList } = props;
+
+  return (
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Coach</TableCell>
+            <TableCell align="left">Date</TableCell>
+            <TableCell align="right">Start Time</TableCell>
+            <TableCell align="right">End Time</TableCell>
+            <TableCell align="right">Available</TableCell>
+          </TableRow>
+        </TableHead>
+
+        {/** Iterate through the schedule items to populate our table */}
+        <TableBody>
+          {scheduleList.map((scheduleItem, index) => (
+            <TableRow
+              key={`${scheduleItem.startTime}_${index}`}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {scheduleItem.coach.name}
+              </TableCell>
+              <TableCell align="left">
                 {dayjs(scheduleItem.startTime).format("dddd, MMMM D YYYY")}
               </TableCell>
 

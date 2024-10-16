@@ -9,13 +9,11 @@ import dayjs, { type Dayjs } from "dayjs";
 import Button from "@mui/material/Button";
 
 import {
-  type BookedScheduleItem,
-  type ScheduleItem,
   ApiService,
+  ScheduleItemWithAdditionalInformation,
 } from "../../services";
 import { useAuthentication } from "../../hooks";
-import { ScheduleList } from "./scheduleList";
-import { TimeUtilities } from "./timeUtilities";
+import { ScheduleListForStudent } from "./scheduleList";
 
 const StyledBookingContainer = styled(Paper)(({ theme }) => ({
   minWidth: "400px",
@@ -35,10 +33,21 @@ const StyledSchedulingContainer = styled(Box)(({ theme }) => ({
 
 export const StudentBooking = () => {
   const { user } = useAuthentication();
+  const [scheduleList, setScheduleList] = React.useState<
+    Array<ScheduleItemWithAdditionalInformation>
+  >([]);
+  React.useEffect(() => {
+    if (user) {
+      const fetchScheduleList = async () => {
+        const scheduleList = await ApiService.fetchScheduleListForStudent(
+          user.id
+        );
 
-  const [scheduleList, setScheduleList] = React.useState<Array<ScheduleItem>>(
-    []
-  );
+        setScheduleList(scheduleList);
+      };
+      fetchScheduleList();
+    }
+  }, [user]);
 
   /** Handler for when an availability slot is added */
   async function handleAddSlotClick() {}
@@ -50,7 +59,7 @@ export const StudentBooking = () => {
           <Typography variant="body1">
             Book an appointment with a coach below
           </Typography>
-          <ScheduleList scheduleList={scheduleList} />
+          <ScheduleListForStudent scheduleList={scheduleList} />
         </StyledSchedulingContainer>
 
         <Button variant={"contained"} onClick={handleAddSlotClick}>
